@@ -1,6 +1,6 @@
 {
-    "name": "rafaelcx/bday-reminder",
-    "description": "This is a simple tool designed to help remember birthdays by automatically adding them as recurring events somewhere else.",
+    "name": "rafaelcx/piter",
+    "description": "A personal mentat: a machine that organizes, advises, and keeps life in order.",
     "authors": [
         {
             "name": "Rafael Garcia",

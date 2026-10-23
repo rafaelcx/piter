@@ -1,6 +1,6 @@
-# Birthday Reminder Tool
+# Piter de Vries
 
-This is a simple tool designed to help you remember you close ones' birthdays by automatically adding them as recurring events, periodically forwarded to messaging apps.
+A personal mentat: a machine that organizes, advises, and keeps life in order.
 
 ---
 
@@ -26,8 +26,8 @@ This project uses SQLite as its persistent storage layer. The database file live
 To create the required tables and seed the initial records, run:
 
 ```
-docker compose exec bday-reminder php bin/db-migrate.php
-docker compose exec bday-reminder php bin/db-seed.php
+docker compose exec piter php bin/db-migrate.php
+docker compose exec piter php bin/db-seed.php
 ```
 
 The migration script is intended for local setup and production provisioning alike. The migration script creates all app tables, and the seed script (for local development) inserts the initial default data. Running them again is safe for schema creation and should not duplicate rows when the underlying database action is idempotent.
@@ -37,5 +37,5 @@ The migration script is intended for local setup and production provisioning ali
 To run the PHPUnit tests for the app, run the following command:
 
 ```
-docker compose exec bday-reminder vendor/bin/phpunit
+docker compose exec piter vendor/bin/phpunit
 ```

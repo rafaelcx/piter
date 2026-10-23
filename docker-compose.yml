@@ -1,7 +1,7 @@
 services:
 
-  bday-reminder:
-    container_name: bday-reminder
+  piter:
+    container_name: piter
     build:
       context: .
       dockerfile: Dockerfile
