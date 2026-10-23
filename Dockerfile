@@ -22,8 +22,8 @@ COPY . .
 RUN composer dump-autoload
 
 # Copy the cron definition
-COPY cron/crontab.txt /etc/cron.d/birthday-cron
-RUN chmod 0644 /etc/cron.d/birthday-cron && crontab /etc/cron.d/birthday-cron
+COPY cron/crontab.txt /etc/cron.d/piter-cron
+RUN chmod 0644 /etc/cron.d/piter-cron && crontab /etc/cron.d/piter-cron
 
 # Create log file
 RUN touch /var/log/cron.log
