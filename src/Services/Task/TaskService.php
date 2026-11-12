@@ -43,8 +43,13 @@ class TaskService implements Notifier, Interactor {
             switch ($command) {
                 case 'add':
                     $this->addTask($update, $params);
+                    break;
                 case 'complete':
                     $this->completeTask($params);
+                    break;
+                case 'list':
+                    $this->listTasks($update);
+                    break;   
             };
         }
     }
@@ -61,6 +66,19 @@ class TaskService implements Notifier, Interactor {
             throw new \Exception('Task service `complete` got unexpected params');
         }
         TaskRepositoryResolver::resolve()->completeTask($params);
+    }
+
+    private function listTasks(Message $m): void {
+        $user = UserRepositoryResolver::resolve()->findByUid($m->user_uid);
+        if (!$user) {
+            throw new \Exception('Task service `list` attempt of non existent user');
+        }
+
+        $task_list = TaskRepositoryResolver::resolve()
+            ->findByUserUidAfterDate($user->uid, Clock::now()->minusDays(30));
+
+        $message = TaskServiceMessage::build($user, ...$task_list);
+        MessengerResolver::resolve()->post($user, $message);
     }
 
 }

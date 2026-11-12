@@ -6,6 +6,7 @@ namespace App\Repository\User;
 
 use App\Storage\Database\DatabaseResolver;
 use App\Utils\Clock;
+use PDO;
 
 class UserRepositoryInSqlite implements UserRepository {
 
@@ -47,6 +48,22 @@ class UserRepositoryInSqlite implements UserRepository {
             Clock::at($r['created_at']
         ));
         return array_map($fn, $rows ?: []);
+    }
+
+    public function findByUid(string $uid): ?User {
+        $sql = <<<SQL
+            SELECT * FROM users WHERE uid = :uid;
+            SQL;
+        
+        $stmt = DatabaseResolver::resolve()->prepare($sql);
+        $stmt->execute([':uid' => $uid]);
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC)[0] ?? null;
+
+        if (is_null($row)) {
+            return null;
+        }
+
+        return new User($row['uid'], $row['name'], Clock::at($row['created_at']));
     }
 
 }

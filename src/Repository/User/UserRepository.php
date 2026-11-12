@@ -7,7 +7,11 @@ namespace App\Repository\User;
 interface UserRepository {
 
     public function create(string $name): void;
+    
     /** @return User[] */
     public function findAll(): array;
+
+    public function findByUid(string $uid): ?User;
+
 
 }
