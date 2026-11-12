@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Src\Repository\User;
 
+use App\Repository\User\User;
 use App\Repository\User\UserRepositoryInSqlite;
 use App\Utils\Clock;
 use PHPUnit\Framework\Attributes\Before;
@@ -40,6 +41,19 @@ class UserRepositoryInSqliteTest extends DbCustomTestCase {
     public function testRepository_FindAll_OnEmpty(): void {
         $persisted_users = $this->user_repository->findAll();
         $this->assertSame([], $persisted_users);
+    }
+
+    public function testRepository_FindByUid(): void {
+        $this->user_repository->create('name');
+        $persisted_user = $this->user_repository->findAll()[0];
+        $found_user = $this->user_repository->findByUid($persisted_user->uid);
+        $this->assertInstanceOf(User::class, $found_user);
+
+    }
+
+    public function testRepository_FindByUid_WhenNoMatch(): void {
+        $found_user = $this->user_repository->findByUid('non_existent');
+        $this->assertNull($found_user);
     }
 
 }

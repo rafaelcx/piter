@@ -281,6 +281,41 @@ class TaskServiceTest extends DbCustomTestCase {
         new TaskService()->processInteractions();
     }
 
+    public function testService_List_ShouldListTasksFromUser(): void {
+        $user_1 = $this->createAndGetUser('user1');
+        $user_2 = $this->createAndGetUser('user2');
+
+        $this->createTaskForUser($user_1, 'Task One');
+        $this->createTaskForUser($user_1, 'Task Two');
+        $this->createTaskForUser($user_2, 'Task Three');
+
+        $update_1 = new Message(id: '1', message_id: '10', user_uid: $user_1->uid, text: 'task list');
+        $get_updates_behavior = fn() => [$update_1];
+        $mock_notifier = new MessengerForTests();
+        $mock_notifier->setGetUpdatesBehavior($get_updates_behavior);
+        MessengerResolverForTests::override($mock_notifier);
+
+        // Track the dispatched message
+        $dispatched_message = '';
+        $mock_notifier_behavior = function(User $_, string $message) use (&$dispatched_message) {
+            $dispatched_message = $message;
+        };
+        $mock_notifier->setPostBehavior($mock_notifier_behavior);
+
+        new TaskService()->processInteractions();
+
+        $expected_dispatched_message = <<< STR
+        Here are you tasks user1.
+
+        The first ones are pending while the things you done in the last two weeks shows on the botton.
+
+        📋 [1] Task One
+        📋 [2] Task Two
+
+        STR;
+        $this->assertSame($expected_dispatched_message, $dispatched_message);
+    }
+
     private function createAndGetUser(string $user_name): User {
         $user_repo = UserRepositoryResolver::resolve();
         $user_repo->create($user_name);
