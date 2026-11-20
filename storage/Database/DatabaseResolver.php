@@ -19,7 +19,7 @@ class DatabaseResolver {
     private static function createInstance(): PDO {
         self::validateEnvironment();
 
-        $db_path = __DIR__ . '/../../db/database.sqlite';
+        $db_path = __DIR__ . '/../../data/database.sqlite';
         $pdo = new PDO('sqlite:' . $db_path);
 
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
