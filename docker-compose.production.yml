@@ -1,0 +1,5 @@
+services:
+  piter:
+    volumes: !override
+      - /srv/data/piter:/app/data
+
